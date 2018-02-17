@@ -104,9 +104,9 @@ async function linteverything (options) {
 	options.rootFolder = options.rootFolder || __dirname;
 	options.workingFolder
 		= options.workingFolder || options.rootFolder || __dirname;
-	options.ignore.push('node_modules', 'package-lock.json', '.git');
+	options.ignore.push('node_modules', 'package-lock.json', '.git', '.travis.yml');
 	await lintFolder(options);
-} 
+}
 
 
 async function main() {
