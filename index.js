@@ -125,10 +125,10 @@ async function main() {
 		}
 		if(errorCount) {
 			console.log(chalk.red(`${errorCount} errors`));
-			return 1;
+			process.exit(1);
 		}
 	}
-	return 0;
+	process.exit(0);
 }
 
 
