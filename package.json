@@ -1,0 +1,22 @@
+{
+	"name": "linteverything",
+	"version": "0.0.1",
+	"description": "lint everything",
+	"main": "index.js",
+	"scripts": {
+		"lint": "eslint ./**/*.js; node index.js"
+	},
+	"keywords": [
+		"lint",
+		"linter"
+	],
+	"author": "Loïc Bourgois",
+	"license": "MIT",
+	"devDependencies": {
+		"eslint": "^4.18.0",
+		"mocha": "^5.0.1"
+	},
+	"dependencies": {
+		"chalk": "^2.3.1"
+	}
+}
