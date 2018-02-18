@@ -100,17 +100,17 @@ const pathMatchIgnore = function(path, options) {
 
 async function linteverything (options) {
 	options = options || {};
-	options.ignore = [];
+	options.ignore = options.ignore || [];
 	options.rootFolder = options.rootFolder || process.cwd();
 	options.workingFolder
 		= options.workingFolder || options.rootFolder || process.cwd();
-	options.ignore.push('node_modules', 'package-lock.json', '.git', '.travis.yml');
 	await lintFolder(options);
 }
 
 
 async function main() {
-	await linteverything();
+	let options = require('./.linteverythingrc');
+	await linteverything(options);
 	let warnCount = results.filter(function(r){
 		return (r.severity === SEVERITY_WARNING);
 	}).length;
