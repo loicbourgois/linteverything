@@ -16,6 +16,9 @@
 		"eslint": "^4.18.0",
 		"mocha": "^5.0.1"
 	},
+	"bin": {
+		"linteverything": "./bin/linteverything.js"
+	},
 	"dependencies": {
 		"chalk": "^2.3.1"
 	},
