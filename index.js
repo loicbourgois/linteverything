@@ -109,7 +109,7 @@ async function linteverything (options) {
 
 
 async function main() {
-	let options = require('./.linteverythingrc');
+	let options = require(process.cwd() + '/.linteverythingrc');
 	await linteverything(options);
 	let warnCount = results.filter(function(r){
 		return (r.severity === SEVERITY_WARNING);
