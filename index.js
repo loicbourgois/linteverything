@@ -101,9 +101,9 @@ const pathMatchIgnore = function(path, options) {
 async function linteverything (options) {
 	options = options || {};
 	options.ignore = [];
-	options.rootFolder = options.rootFolder || __dirname;
+	options.rootFolder = options.rootFolder || process.cwd();
 	options.workingFolder
-		= options.workingFolder || options.rootFolder || __dirname;
+		= options.workingFolder || options.rootFolder || process.cwd();
 	options.ignore.push('node_modules', 'package-lock.json', '.git', '.travis.yml');
 	await lintFolder(options);
 }
