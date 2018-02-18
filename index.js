@@ -132,5 +132,4 @@ async function main() {
 }
 
 
-main();
-exports = module.exports = linteverything;
+exports = module.exports = main;

@@ -1,3 +1,4 @@
 #!/usr/bin/env node
 'use strict';
-console.log('e');
+const le = require('../index');
+le();
