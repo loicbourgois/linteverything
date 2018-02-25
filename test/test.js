@@ -8,7 +8,6 @@ describe('Linteverything', function() {
 			}).then(data => {
 				assert.equal(data.options.verbose, true);
 				assert.deepEqual(data.results, []);
-				assert.equal(1,2);
 			});
 		});
 	});
