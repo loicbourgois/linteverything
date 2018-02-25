@@ -4,7 +4,8 @@
 	"description": "lint everything",
 	"main": "index.js",
 	"scripts": {
-		"lint": "eslint ./**/*.js; node ./bin/linteverything.js"
+		"lint": "eslint ./**/*.js; node ./bin/linteverything.js",
+		"test": "./node_modules/mocha/bin/mocha"
 	},
 	"keywords": [
 		"lint",
