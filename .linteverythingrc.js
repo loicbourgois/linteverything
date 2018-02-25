@@ -4,5 +4,9 @@ module.exports = {
 		'package-lock.json',
 		'.git',
 		'.travis.yml'
-	]
+	],
+	linters: {
+		eslint: true
+	},
+	verbose: false
 };

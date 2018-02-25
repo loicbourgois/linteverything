@@ -8,11 +8,15 @@ module.exports = {
 	"parserOptions": {
 		"sourceType": "module"
 	},
+	"parserOptions": {
+		"ecmaVersion": 2017
+	},
 	"rules": {
 		"indent": [
 			"error",
 			"tab"
 		],
+		"no-console": [0],
 		"linebreak-style": [
 			"error",
 			"unix"

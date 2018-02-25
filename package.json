@@ -1,10 +1,11 @@
 {
 	"name": "linteverything",
-	"version": "0.2.1",
+	"version": "0.3.0",
 	"description": "lint everything",
 	"main": "index.js",
 	"scripts": {
-		"lint": "eslint ./**/*.js; node ./bin/linteverything.js"
+		"lint": "node ./bin/linteverything.js",
+		"test": "./node_modules/mocha/bin/mocha"
 	},
 	"keywords": [
 		"lint",
@@ -13,14 +14,14 @@
 	"author": "Loïc Bourgois",
 	"license": "MIT",
 	"devDependencies": {
-		"eslint": "^4.18.0",
 		"mocha": "^5.0.1"
 	},
 	"bin": {
 		"linteverything": "./bin/linteverything.js"
 	},
 	"dependencies": {
-		"chalk": "^2.3.1"
+		"chalk": "^2.3.1",
+		"eslint": "^4.18.0"
 	},
 	"repository": {
 		"type": "git",
