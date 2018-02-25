@@ -1,9 +1,9 @@
 const assert = require('assert');
 const linteverything = require('../index');
-describe('Array', function() {
-	describe('#indexOf()', function() {
-		it('should lint everything', function() {
-			linteverything({
+describe('Linteverything', function() {
+	describe('normal use', function() {
+		it('should lint everything', async function() {
+			await linteverything({
 				verbose: true
 			}).then(data => {
 				assert.equal(data.options.verbose, true);
