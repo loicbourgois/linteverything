@@ -126,8 +126,8 @@ async function linteverything (options) {
 }
 
 
-async function main() {
-	let options = require(process.cwd() + '/.linteverythingrc');
+async function main(options) {
+	options = Object.assign({}, require(process.cwd() + '/.linteverythingrc'), options);
 	if(options.verbose) {
 		console.log(`Lint everything with options: ${JSON.stringify(options, null, 2)}`);
 	}
@@ -149,7 +149,10 @@ async function main() {
 			process.exit(1);
 		}
 	}
-	process.exit(0);
+	return {
+		results: results,
+		options: options
+	};
 }
 
 

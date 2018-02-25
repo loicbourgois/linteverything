@@ -1,10 +1,14 @@
 const assert = require('assert');
-const linteverything = require('../index.js');
+const linteverything = require('../index');
 describe('Array', function() {
 	describe('#indexOf()', function() {
-		it('should return -1 when the value is not present', function() {
-			assert.equal([1,2,3].indexOf(4), -1);
-			linteverything();
+		it('should lint everything', function() {
+			linteverything({
+				verbose: true
+			}).then(data => {
+				assert.equal(data.options.verbose, true);
+				assert.deepEqual(data.results, []);
+			});
 		});
 	});
 });
