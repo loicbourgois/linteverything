@@ -7,6 +7,7 @@ describe('Linteverything', function() {
 				verbose: true
 			}).then(data => {
 				assert.equal(data.options.verbose, true);
+				assert.equal(data.options.linters.eslint, true);
 				assert.deepEqual(data.results, []);
 			});
 		});
