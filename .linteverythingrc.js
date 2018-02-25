@@ -5,5 +5,8 @@ module.exports = {
 		'.git',
 		'.travis.yml'
 	],
-	verbose: true
+	linters: {
+		eslint: true
+	},
+	verbose: false
 };

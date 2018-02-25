@@ -1,7 +1,6 @@
-'use strict'
+'use strict';
 const {promisify} = require('util');
 const fs = require('fs');
-const readline = require('readline');
 const chalk = require('chalk');
 const readdir = promisify(fs.readdir);
 
@@ -13,33 +12,32 @@ let results = [];
 
 
 async function lintFolder(options) {
-	if(pathMatchIgnore(options.workingFolder, options)) {
+	if(pathMatchIgnore(options.workingFolder, options)){
 		return;
 	}
-	if(options.verbose) {
+	if(options.verbose){
 		console.log(`linting ${options.workingFolder}`);
 	}
 	const files = await readdir(options.workingFolder);
 	for (let file of files) {
 		let options_ = Object.assign({}, options);
-		file = options_.workingFolder+'/'+file
+		file = options_.workingFolder + '/' + file;
 		if(fs.lstatSync(file).isDirectory()) {
 			options_.workingFolder = file;
 			await lintFolder(options_);
 		} else if (fs.lstatSync(file).isFile()) {
 			options_.workingFile = file;
-			lintFile(options_)
-		} else {
+			lintFile(options_);
 		}
 	}
 }
 
 
 const lintFile = function(options) {
-	if(pathMatchIgnore(options.workingFile, options)) {
+	if(pathMatchIgnore(options.workingFile, options)){
 		return;
 	}
-	if(options.verbose) {
+	if(options.verbose){
 		console.log(`\tlinting ${options.workingFile}`);
 	}
 	const lines = fs.readFileSync(options.workingFile, 'utf-8')
@@ -49,14 +47,14 @@ const lintFile = function(options) {
 		number++;
 		lintLine(line, number, options);
 	});
-}
+};
 
 
 const lintLine = function(line, number, options) {
 	let i = 1;
 	lintIndetation(line, number, options, i++, 'no-space-indent');
 	lintTralingSpaces(line, number, options, i++, 'no-trailing-space');
-}
+};
 
 
 const lintIndetation = function(line, number, options, errorCode, errorString) {
@@ -65,7 +63,7 @@ const lintIndetation = function(line, number, options, errorCode, errorString) {
 	if(r) {
 		addResult(options.workingFile, line, number, errorCode, errorString, SEVERITY_WARNING);
 	}
-}
+};
 
 
 const lintTralingSpaces = function(line, number, options, errorCode, errorString) {
@@ -74,7 +72,7 @@ const lintTralingSpaces = function(line, number, options, errorCode, errorString
 	if(r) {
 		addResult(options.workingFile, line, number, errorCode, errorString, SEVERITY_ERROR);
 	}
-}
+};
 
 
 const addResult = function(path, line, lineNumber, errorCode, errorString, severity) {
@@ -85,12 +83,14 @@ const addResult = function(path, line, lineNumber, errorCode, errorString, sever
 		error: errorCode,
 		severity: severity
 	});
-	if(severity === SEVERITY_ERROR) {
+	if(severity === SEVERITY_NONE) {
+		console.log(`${path}\n  l.${lineNumber}\t${('log')}\t${errorCode}-${errorString}`);
+	} if(severity === SEVERITY_ERROR) {
 		console.log(`${path}\n  l.${lineNumber}\t${chalk.red('error')}\t${errorCode}-${errorString}`);
 	} else if(severity === SEVERITY_WARNING) {
 		console.log(`${path}\n  l.${lineNumber}\t${chalk.yellow('warning')}\t${errorCode}-${errorString}`);
 	}
-}
+};
 
 
 const pathMatchIgnore = function(path, options) {
@@ -101,15 +101,27 @@ const pathMatchIgnore = function(path, options) {
 		}
 	});
 	return b;
-}
+};
 
 
 async function linteverything (options) {
-	options = options || {};
+	options = options||{};
 	options.ignore = options.ignore || [];
-	options.rootFolder = options.rootFolder || process.cwd();
+	options.rootFolder = options.rootFolder||process.cwd();
 	options.workingFolder
 		= options.workingFolder || options.rootFolder || process.cwd();
+
+	if(options.linters && options.linters.eslint) {
+		var CLIEngine = require('eslint').CLIEngine;
+		var cli = new CLIEngine({useEslintrc: true});
+		var report = cli.executeOnFiles(['./']);
+		report.results.forEach(function(result){
+			result.messages.forEach(function(message){
+				addResult(result.filePath, message.source, message.line, 'eslint', message.ruleId, message.severity);
+			});
+		});
+	}
+
 	await lintFolder(options);
 }
 
@@ -127,7 +139,7 @@ async function main() {
 		return (r.severity === SEVERITY_ERROR);
 	}).length;
 	if(!errorCount && !warnCount) {
-		console.log(chalk.green('Success'))
+		console.log(chalk.green('Success'));
 	} else {
 		if(warnCount) {
 			console.log(chalk.yellow(`${warnCount} warnings`));
