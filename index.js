@@ -16,6 +16,9 @@ async function lintFolder(options) {
 	if(pathMatchIgnore(options.workingFolder, options)) {
 		return;
 	}
+	if(options.verbose) {
+		console.log(`linting ${options.workingFolder}`);
+	}
 	const files = await readdir(options.workingFolder);
 	for (let file of files) {
 		let options_ = Object.assign({}, options);
@@ -35,6 +38,9 @@ async function lintFolder(options) {
 const lintFile = function(options) {
 	if(pathMatchIgnore(options.workingFile, options)) {
 		return;
+	}
+	if(options.verbose) {
+		console.log(`\tlinting ${options.workingFile}`);
 	}
 	const lines = fs.readFileSync(options.workingFile, 'utf-8')
 		.split('\n');
@@ -110,6 +116,9 @@ async function linteverything (options) {
 
 async function main() {
 	let options = require(process.cwd() + '/.linteverythingrc');
+	if(options.verbose) {
+		console.log(`Lint everything with options: ${JSON.stringify(options, null, 2)}`);
+	}
 	await linteverything(options);
 	let warnCount = results.filter(function(r){
 		return (r.severity === SEVERITY_WARNING);
