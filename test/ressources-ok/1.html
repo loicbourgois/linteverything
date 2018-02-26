@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<title>Élèves IG2I</title>
+		<meta name="author" content="Élèves IG2I contributors">
+		<meta name="description" content="Élèves IG2I">
+		<meta name="keywords" content="ig2i">
+		<link rel="shortcut icon" href="icon-144.png" type="image/png">
+		<link rel="stylesheet" href="style.css" type="text/css">
+	</head>
+	<body>
+		<div id="index">
+			<ul>
+				<li><a href="#introduction">Introduction</a></li>
+				<li><a href="#convention">Conventions de nommage</a></li>
+				<li><a href="#contenu">Contenu</a></li>
+				<li><a href="#qualite">Qualité</a></li>
+				<li><a href="#faq">FAQ</a></li>
+			</ul>
+		</div>
+		<div id="content-wrapper">
+			<div id="content">
+				<h1>Élèves IG2I</h1>
+				<h2 id="introduction">Introduction</h2>
+				<p>
+					Salut à tou·te·s les IG2ien·ne·s !
+				</p>
+				<p>
+					Ce site a pour but de vous initier aux régles et conseils d'utilisation de votre organisation : <a href="https://github.com/eleves-ig2i">eleves-ig2i</a>. Si vous n'avez jamais utilisé Git, son utilisation vous semblera déroutante, voir compliquée au début, mais d'ici quelque temps vous remercirez les élèves qui ont voulu passer de Google Drive à GitHub !
+				</p>
+				<h2 id="convention">Conventions de nommage</h2>
+				<h3>Pour un TP ou TD</h3>
+				<p>
+					<span class="code">ig2i-${promo}-${matière}-${année}-(tp|td)${numéro}-${titre}</span>, avec :
+				</p>
+				<ul>
+					<li><span class="code">ig2i</span> : préfixe commun à l'ensemble des dépôts de l'organisation ;</li>
+					<li><span class="code">${promo}</span> : votre promo, soit le1, le2, le3, le4, le5, la1, la2, la3 ;</li>
+					<li><span class="code">${matière}</span> : diminutif figurant sur la plaquette, par exemple <span class="code">poo</span> ;</li>
+					<li><span class="code">${année}</span> : deuxième partie de l'année scolaire, soit <span class="code">2018</span> pour <span class="code">2017/2018</span> ;</li>
+					<li><span class="code">${numéro}</span> : numéro du TP/TD ;</li>
+					<li><span class="code">${titre}</span> : optionnel, titre du TP/TD.</li>
+				</ul>
+				<h3>Pour un CTP</h3>
+				<p>
+					<span class="code">ig2i-${promo}-${matière}-${année}-ctp${numéro de session}-${titre}</span>, avec :
+				</p>
+				<ul>
+					<li><span class="code">{numéro de session}</span> : numéro de session, soit <span class="code">1</span> pour la session initiale ou <span class="code">2</span> pour un rattrapage.</li>
+				</ul>
+				<h3>Pour un projet associé à une matière</h3>
+				<p>
+					<span class="code">ig2i-${promo}-${matière}-${année}-projet-${identifiant}</span>, avec :
+				</p>
+				<ul>
+					<li><span class="code">${identifiant}</span> : nom du projet ou de l'équipe.</li>
+				</ul>
+				<h3>Pour une matière-projet</h3>
+				<p>
+					<span class="code">ig2i-${promo}-${matière}-${année}-${identifiant}</span>, avec :
+				</p>
+				<ul>
+					<li><span class="code">${matière}</span> : matière parmis PINF, PIND ;</li>
+					<li><span class="code">${identifiant}</span> : nom du projet ou de l'équipe.</li>
+				</ul>
+				<h3>Pour un outil lié à un événement</h3>
+				<p>
+					<span class="code">ig2i-${promo}-${événement}-${année}-${outil}</span>, avec :
+				</p>
+				<ul>
+					<li><span class="code">${événement}</span> : événement parmis JPO, JDN, RI, NDL5 ;</li>
+					<li><span class="code">${outil}</span> : type de l'outil réalisé pour l'événement.</li>
+				</ul>
+				<h3>Quelques exemples</h3>
+				<ul>
+					<li><span class="code">ig2i-le1-web1-2018-tp1</span> : TP n°1 de Web en première année initiale pour l'année scolaire 2017/2018 ;</li>
+					<li><span class="code">ig2i-le2-pinf-2016-lespinpinfs</span> : projet PINF non confidentiel réalisé par l'équipe de LE2 "Les Pinpinfs" ;</li>
+					<li><span class="code">ig2i-l3-ndl5-2018-site</span> : site web pour la Nuit des L5, géré par les LE3 et LA1.</li>
+				</ul>
+				<h2 id="contenu">Contenu</h2>
+				<p>
+					Pour qu'un nouveau dépôt soit valide, il contiendra à minima :
+				</p>
+				<ul>
+					<li>un fichier <span class="code">README.md</span> qui expliquera brièvement en quoi consiste le dépôt ;</li>
+					<li>les sources.</li>
+				</ul>
+				<p>
+					Si le dépôt est associé à une matière, il devra aussi contenir :
+				</p>
+				<ul>
+					<li>le sujet du TP, TD, CTP ou projet, nommé comme suit : <span class="code">${nom du dépôt}-sujet.pdf</span> ;</li>
+					<li>le compte-rendu du TP, TD, CTP ou projet, nommé comme suit : <span class="code">${nom du dépôt}-cr.(txt|pdf)</span>.</li>
+				</ul>
+				<p>
+					Par ailleurs, il est encouragé d'ajouter les fichiers suivants :
+				</p>
+				<ul>
+					<li><span class="code">.gitignore</span> : permet <a href="https://github.com/github/gitignore#a-collection-of-gitignore-templates">d'ignorer</a> certains fichiers ;</li>
+					<li><span class="code">.travis.yml</span> : permet de lancer un build <a href="https://docs.travis-ci.com/">Travis</a> et tester la validité du code.</li>
+				</ul>
+				<h2 id="qualite">Qualité</h2>
+				<p>
+					De manière à assurer l'homogénéité et la qualité du code dans les dépôts de l'organisation, les règles suivantes seront respectées :
+				</p>
+				<ul>
+					<li>les conventions de nommages adoptées par chaque language seront respectivement utilisées ;</li>
+					<li>les tabulations "<span class="code">\t</span>" seront utilisées pour l'indentation ;</li>
+					<li>les espaces en fin de lignes (trailing spaces en anglais) seront supprimés ;</li>
+					<li>seuls les fichiers sources seront traqués : l'utilisation d'un fichier <span class="code">.gitignore</span> est encouragée ;</li>
+					<li>si un language ne définit pas de conventions, et si la règle n'est pas déjà énoncée ici, alors il faudra se baser sur <a href="https://github.com/google/styleguide#google-style-guides">les règles définies par Google</a>.</li>
+				</ul>
+				<h2 id="faq">FAQ</h2>
+				<h3>Git, qu'est-ce que c'est ?</h3>
+				<p>
+					Git est un logiciel de gestion de versions décentralisé, c'est à dire un logiciel qui permet de stocker un ensemble de fichiers en conservant la chronologie de toutes les modifications qui ont été effectuées dessus, en permettant à chacun de travailler à son rythme, de façon désynchronisée des autres, et d'offrir un moyen à chacun des développeurs de s'échanger leur travaux respectifs.
+				</p>
+				<p>
+					Ce <a href="https://rogerdudler.github.io/git-guide/index.fr.html">petit guide git</a> pourra vous aider si vous débutez.
+				</p>
+				<h3>GitHub, qu'est-ce que c'est ?</h3>
+				<p>
+					GitHub est un service web d'hébergement et de gestion de développement de logiciels, utilisant le logiciel de gestion de versions décentralisé Git.
+				</p>
+				<p>
+					Si vous le souhaitez, GitHub propose un <a href="https://guides.github.com/activities/hello-world/">Hello World</a> pour se familiariser avec la plateforme.
+				</p>
+				<h3>Travis, qu'est-ce que c'est ?</h3>
+				<p>
+					Travis CI est un logiciel libre d'intégration continue. Il fournit un service en ligne utilisé pour compiler, tester et déployer le code source des logiciels développés, notamment en lien avec le service d'hébergement du code source GitHub.
+				</p>
+				<p>
+					Pour bien démarrer avec Travis, rien de mieux que <a href="https://docs.travis-ci.com/user/for-beginners">la présentation officielle des concepts de base</a>.
+				</p>
+				<h3>Pourquoi je ne peux pas mettre mon code sur le drive ?</h3>
+				<p>
+					Car Github est bien mieux adapté.
+				</p>
+			</div>
+		</div>
+		<script src="script.js"></script>
+	</body>
+</html>

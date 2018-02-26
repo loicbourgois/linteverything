@@ -3,6 +3,7 @@ const {promisify} = require('util');
 const fs = require('fs');
 const chalk = require('chalk');
 const readdir = promisify(fs.readdir);
+const htmllint = require('htmllint');
 
 const SEVERITY_NONE = 0;
 const SEVERITY_WARNING = 1;
@@ -27,26 +28,33 @@ async function lintFolder(options) {
 			await lintFolder(options_);
 		} else if (fs.lstatSync(file).isFile()) {
 			options_.workingFile = file;
-			lintFile(options_);
+			await lintFile(options_);
 		}
 	}
 }
 
 
-const lintFile = function(options) {
+const lintFile = async function(options) {
 	if(pathMatchIgnore(options.workingFile, options)){
 		return;
 	}
 	if(options.verbose){
 		console.log(`\tlinting ${options.workingFile}`);
 	}
-	const lines = fs.readFileSync(options.workingFile, 'utf-8')
-		.split('\n');
+	const fileContent = fs.readFileSync(options.workingFile, 'utf-8');
+	const lines = fileContent.split('\n');
 	let number = 0;
 	lines.forEach(function(line) {
 		number++;
 		lintLine(line, number, options);
 	});
+	if(options.linters && options.linters.htmllint) {
+		await htmllint(fileContent, options.linters.htmllint.settings).then(function(out) {
+			out.forEach(function(e){
+				addResult(options.workingFile, lines[e.line-1], e.line, `htmllint-${e.code}`, e.rule, SEVERITY_ERROR);
+			});
+		});
+	}
 };
 
 
@@ -110,11 +118,26 @@ async function linteverything (options) {
 	options.rootFolder = options.rootFolder||process.cwd();
 	options.workingFolder
 		= options.workingFolder || options.rootFolder || process.cwd();
+	options.linters = options.linters||{};
+	options.linters.htmllint = options.linters.htmllint||{};
+	let htmllintrc = {};
+	try {
+		htmllintrc = require(process.cwd() + '/.htmllintrc');
+	} catch (e) {
+		if (e.code !== 'MODULE_NOT_FOUND') {
+			throw e;
+		}
+	}
+	options.linters.htmllint.settings = Object.assign(
+		{},
+		options.linters.htmllint.settings,
+		htmllintrc
+	);
 
 	if(options.linters && options.linters.eslint) {
-		var CLIEngine = require('eslint').CLIEngine;
-		var cli = new CLIEngine({useEslintrc: true});
-		var report = cli.executeOnFiles(['./']);
+		let CLIEngine = require('eslint').CLIEngine;
+		let cli = new CLIEngine({useEslintrc: true});
+		let report = cli.executeOnFiles(['./']);
 		report.results.forEach(function(result){
 			result.messages.forEach(function(message){
 				addResult(result.filePath, message.source, message.line, 'eslint', message.ruleId, message.severity);
@@ -127,7 +150,15 @@ async function linteverything (options) {
 
 
 async function main(options) {
-	options = Object.assign({}, require(process.cwd() + '/.linteverythingrc'), options, require('./default-settings'));
+	let linteverythingrc = {};
+	try {
+		linteverythingrc = require(process.cwd() + '/.linteverythingrc');
+	} catch (e) {
+		if (e.code !== 'MODULE_NOT_FOUND') {
+			throw e;
+		}
+	}
+	options = Object.assign({}, linteverythingrc, options, require('./default-settings'));
 	if(options.verbose) {
 		console.log(`Lint everything with options: ${JSON.stringify(options, null, 2)}`);
 	}
