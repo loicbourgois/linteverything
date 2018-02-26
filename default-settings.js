@@ -1,5 +1,6 @@
 module.exports = {
 	linters: {
-		eslint: true
+		eslint: true,
+		htmllint: true
 	}
 };
