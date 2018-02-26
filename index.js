@@ -48,7 +48,14 @@ const lintFile = async function(options) {
 		number++;
 		lintLine(line, number, options);
 	});
-	if(options.linters && options.linters.htmllint) {
+	if(
+		options.linters
+		&& options.linters.htmllint
+		&& options.linters.htmllint.extensions.includes(options.workingFile.split('.').pop())
+	) {
+		if(options.verbose){
+			console.log(`\t${chalk.blue('htmllint')} ${options.workingFile}`);
+		}
 		await htmllint(fileContent, options.linters.htmllint.settings).then(function(out) {
 			out.forEach(function(e){
 				addResult(options.workingFile, lines[e.line-1], e.line, `htmllint-${e.code}`, e.rule, SEVERITY_ERROR);

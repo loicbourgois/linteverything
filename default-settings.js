@@ -7,7 +7,10 @@ module.exports = {
 				'attr-quote-style': 'double',
 				'spec-char-escape': false,
 				'id-class-style': 'dash'
-			}
+			},
+			extensions: [
+				'html'
+			]
 		}
 	}
 };
