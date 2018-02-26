@@ -4,7 +4,6 @@ const fs = require('fs');
 const chalk = require('chalk');
 const readdir = promisify(fs.readdir);
 const htmllint = require('htmllint');
-const htmllintrc = require('./.htmllintrc');
 
 const SEVERITY_NONE = 0;
 const SEVERITY_WARNING = 1;
@@ -50,7 +49,7 @@ const lintFile = async function(options) {
 		lintLine(line, number, options);
 	});
 	if(options.linters && options.linters.htmllint) {
-		await htmllint(fileContent, htmllintrc).then(function(out) {
+		await htmllint(fileContent, options.linters.htmllint.settings).then(function(out) {
 			out.forEach(function(e){
 				addResult(options.workingFile, lines[e.line-1], e.line, `htmllint-${e.code}`, e.rule, SEVERITY_ERROR);
 			});
@@ -119,6 +118,21 @@ async function linteverything (options) {
 	options.rootFolder = options.rootFolder||process.cwd();
 	options.workingFolder
 		= options.workingFolder || options.rootFolder || process.cwd();
+	options.linters = options.linters||{};
+	options.linters.htmllint = options.linters.htmllint||{};
+	let htmllintrc = {};
+	try {
+		htmllintrc = require(process.cwd() + '/.htmllintrc');
+	} catch (e) {
+		if (e.code !== 'MODULE_NOT_FOUND') {
+			throw e;
+		}
+	}
+	options.linters.htmllint.settings = Object.assign(
+		{},
+		options.linters.htmllint.settings,
+		htmllintrc
+	);
 
 	if(options.linters && options.linters.eslint) {
 		let CLIEngine = require('eslint').CLIEngine;
@@ -136,7 +150,15 @@ async function linteverything (options) {
 
 
 async function main(options) {
-	options = Object.assign({}, require(process.cwd() + '/.linteverythingrc'), options, require('./default-settings'));
+	let linteverythingrc = {};
+	try {
+		linteverythingrc = require(process.cwd() + '/.linteverythingrc');
+	} catch (e) {
+		if (e.code !== 'MODULE_NOT_FOUND') {
+			throw e;
+		}
+	}
+	options = Object.assign({}, linteverythingrc, options, require('./default-settings'));
 	if(options.verbose) {
 		console.log(`Lint everything with options: ${JSON.stringify(options, null, 2)}`);
 	}
