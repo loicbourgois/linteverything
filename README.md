@@ -70,6 +70,7 @@ An array of files and folders to ignore. They will be ignored by every linters.
 
 ### linters
 Default : all linters are enabled.
+
 The following linters are supported:
 - [checkstyle](https://github.com/checkstyle/checkstyle) ;
 - [eslint](https://github.com/eslint/eslint) ;
