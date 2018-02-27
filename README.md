@@ -1,5 +1,5 @@
 # Lint Everything ! [![Build Status](https://travis-ci.org/loicbourgois/linteverything.svg?branch=master)](https://travis-ci.org/loicbourgois/linteverything)
-> One Linter to parse them all and in the darkness lint them
+> One Linter to parse them all and in the darkness lint them.
 
 ## Usage
 
@@ -20,7 +20,7 @@ Then add a script to `package.json` :
 ```
 Finally run the script:
 ```bash
-npm run linteverything
+$ npm run linteverything
 ```
 
 ### In a Travis CI script
@@ -43,7 +43,9 @@ const linteverything = require('linteverything');
 const options = {
 	verbose:true
 };
-linteverything(options);
+linteverything(options).then(function(result) {
+	console.log(result);
+});
 ```
 
 ## Options
@@ -60,4 +62,5 @@ A list of files and folders to ignore. They will be ignored by every linters.
 The following linters are supported:
 - [eslint](https://github.com/eslint/eslint);
 - [htmllint](https://github.com/htmllint/htmllint).
+
 They are enabled by default.
