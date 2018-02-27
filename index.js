@@ -22,7 +22,7 @@ async function lintFolder(options) {
 		return;
 	}
 	if(options.verbose){
-		console.log(`linting ${options.workingFolder}`);
+		console.log(chalk.cyan('linteverything') + ' ' + options.workingFolder);
 	}
 	const files = await readdir(options.workingFolder);
 	for (let file of files) {
@@ -44,7 +44,7 @@ const lintFile = async function(options) {
 		return;
 	}
 	if(options.verbose){
-		console.log(`\tlinting ${options.workingFile}`);
+		console.log(`\t${chalk.cyan('linteverything')} ${options.workingFile}`);
 	}
 	const fileContent = fs.readFileSync(options.workingFile, 'utf-8');
 	const lines = fileContent.split('\n');
@@ -152,8 +152,8 @@ async function linteverything (options) {
 	);
 
 	if(options.linters && options.linters.eslint) {
-		if(options.verbose === SUPER_VERBOSE){
-			console.log(chalk.blue('eslint'));
+		if(options.verbose){
+			console.log(chalk.blue('eslint') + ' ' + options.workingFolder);
 		}
 		let CLIEngine = require('eslint').CLIEngine;
 		let cli = new CLIEngine({useEslintrc: true});
@@ -166,7 +166,10 @@ async function linteverything (options) {
 	}
 
 	if(options.linters && options.linters.checkstyle) {
-		const {stdout, stderr} = await exec('java -jar linters/checkstyle-8.8-all.jar ./ -c linters/checkstyle.config.xml -f xml');
+		if(options.verbose){
+			console.log(chalk.blue('checkstyle') + ' ' + options.workingFolder);
+		}
+		const {stdout, stderr} = await exec(`java -jar linters/checkstyle-8.8-all.jar ${options.workingFolder} -c linters/checkstyle.config.xml -f xml`);
 		if(options.verbose === SUPER_VERBOSE){
 			console.log(chalk.blue('checkstyle stdout')+'\n', stdout);
 			console.log(chalk.blue('checkstyle stderr')+'\n', stderr);
@@ -186,10 +189,6 @@ async function linteverything (options) {
 				});
 			});
 		});
-	}
-
-	if(options.verbose === SUPER_VERBOSE){
-		console.log(chalk.blue('linteverything'));
 	}
 
 	await lintFolder(options);
