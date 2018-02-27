@@ -50,7 +50,7 @@ linteverything(options).then(function(result) {
 
 ## Options
 Options can be set in 3 places:
-- in `[default-settings.js](default-settings.js)` ;
+- in [`default-settings.js`](default-settings.js) ;
 - in `.linteverythingrc.js` ;
 - in the argument passed to `linteverything(options)`.
 Options are defined in javascript objects.
