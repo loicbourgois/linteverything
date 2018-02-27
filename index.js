@@ -105,6 +105,7 @@ const addResult = function(linter, path, line, lineNumber, errorCode, errorStrin
 		line: line,
 		lineNumber: lineNumber,
 		error: errorCode,
+		errorString: errorString,
 		severity: severity
 	});
 	if(severity === SEVERITY_NONE) {
