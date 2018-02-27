@@ -176,7 +176,9 @@ async function linteverything (options) {
 		if(options.verbose){
 			console.log(chalk.blue('checkstyle') + ' ' + options.workingFolder);
 		}
-		const {stdout, stderr} = await exec(`java -jar linters/checkstyle-8.8-all.jar ${options.workingFolder} -c linters/checkstyle.config.xml -f xml`);
+		const jar = `${__dirname}/linters/checkstyle-8.8-all.jar`;
+		const conf = `${__dirname}/linters/checkstyle.config.xml`;
+		const {stdout, stderr} = await exec(`java -jar ${jar} ${options.workingFolder} -c ${conf} -f xml`);
 		if(options.verbose === SUPER_VERBOSE){
 			console.log(chalk.blue('checkstyle stdout')+'\n', stdout);
 			console.log(chalk.blue('checkstyle stderr')+'\n', stderr);
