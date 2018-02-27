@@ -156,7 +156,14 @@ async function linteverything (options) {
 			console.log(chalk.blue('eslint') + ' ' + options.workingFolder);
 		}
 		let CLIEngine = require('eslint').CLIEngine;
-		let cli = new CLIEngine({useEslintrc: true});
+		const useEslintrc = fs.existsSync(process.cwd() + '/.eslintrc.js');
+		let eslintOptions = options.linters.eslint.settings;
+		if(useEslintrc) {
+			eslintOptions = {
+				useEslintrc: useEslintrc
+			};
+		}
+		let cli = new CLIEngine(eslintOptions);
 		let report = cli.executeOnFiles(['./']);
 		report.results.forEach(function(result){
 			result.messages.forEach(function(message){

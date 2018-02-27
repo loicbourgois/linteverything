@@ -7,8 +7,6 @@ describe('Linteverything', function() {
 				failOnError: false,
 				verbose: true
 			}).then(data => {
-				assert.equal(data.options.verbose, true);
-				assert.equal(data.options.linters.eslint, true);
 				assert.deepEqual(data.results, []);
 			});
 		});
