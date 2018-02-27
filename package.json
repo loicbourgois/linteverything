@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"lint": "node ./bin/linteverything.js",
-		"test": "./node_modules/mocha/bin/mocha"
+		"test": "./node_modules/mocha/bin/mocha -t 60000"
 	},
 	"keywords": [
 		"lint",
