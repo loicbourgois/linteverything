@@ -4,6 +4,7 @@ module.exports = {
 		'package-lock.json',
 		'.git',
 		'.travis.yml',
-		'README.md'
+		'README.md',
+		'linters/checkstyle-8.8-all.jar'
 	]
 };
