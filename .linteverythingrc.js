@@ -3,6 +3,7 @@ module.exports = {
 		'node_modules',
 		'package-lock.json',
 		'.git',
-		'.travis.yml'
+		'.travis.yml',
+		'README.md'
 	]
 };
