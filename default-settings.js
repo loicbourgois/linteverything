@@ -1,5 +1,7 @@
 module.exports = {
+	failOnError: true,
 	linters: {
+		checkstyle: true,
 		eslint: true,
 		htmllint: {
 			settings: {

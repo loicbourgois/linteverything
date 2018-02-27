@@ -4,12 +4,17 @@ const fs = require('fs');
 const chalk = require('chalk');
 const readdir = promisify(fs.readdir);
 const htmllint = require('htmllint');
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
+const parseString = require('xml2js').parseString;
 
 const SEVERITY_NONE = 0;
 const SEVERITY_WARNING = 1;
 const SEVERITY_ERROR = 2;
+const SUPER_VERBOSE = 2;
 
 let results = [];
+let lintersLog = {};
 
 
 async function lintFolder(options) {
@@ -76,7 +81,7 @@ const lintIndetation = function(line, number, options, errorCode, errorString) {
 	let regex = /^([\t]*)([ ]+)/g;
 	let r = regex.exec(line);
 	if(r) {
-		addResult(options.workingFile, line, number, errorCode, errorString, SEVERITY_WARNING);
+		addResult('linteverything', options.workingFile, line, number, errorCode, errorString, SEVERITY_WARNING);
 	}
 };
 
@@ -85,13 +90,17 @@ const lintTralingSpaces = function(line, number, options, errorCode, errorString
 	let regex = /([ \t]+)$/g;
 	let r = regex.exec(line);
 	if(r) {
-		addResult(options.workingFile, line, number, errorCode, errorString, SEVERITY_ERROR);
+		addResult('linteverything', options.workingFile, line, number, errorCode, errorString, SEVERITY_ERROR);
 	}
 };
 
 
-const addResult = function(path, line, lineNumber, errorCode, errorString, severity) {
+const addResult = function(linter, path, line, lineNumber, errorCode, errorString, severity) {
+	if(!['linteverything', 'eslint', 'checkstyle', 'htmllint'].includes(linter)) {
+		throw new Error(`${linter} is not a valid linter`);
+	}
 	results.push({
+		linter: linter,
 		path: path,
 		line: line,
 		lineNumber: lineNumber,
@@ -99,11 +108,11 @@ const addResult = function(path, line, lineNumber, errorCode, errorString, sever
 		severity: severity
 	});
 	if(severity === SEVERITY_NONE) {
-		console.log(`${path}\n  l.${lineNumber}\t${('log')}\t${errorCode}-${errorString}`);
+		console.log(`${path}\n  l.${lineNumber}\t${(linter + ' log')}\t${errorString}`);
 	} if(severity === SEVERITY_ERROR) {
-		console.log(`${path}\n  l.${lineNumber}\t${chalk.red('error')}\t${errorCode}-${errorString}`);
+		console.log(`${path}\n  l.${lineNumber}\t${chalk.red(linter + ' error')}\t${errorString}`);
 	} else if(severity === SEVERITY_WARNING) {
-		console.log(`${path}\n  l.${lineNumber}\t${chalk.yellow('warning')}\t${errorCode}-${errorString}`);
+		console.log(`${path}\n  l.${lineNumber}\t${chalk.yellow(linter + ' warning')}\t${errorString}`);
 	}
 };
 
@@ -142,14 +151,44 @@ async function linteverything (options) {
 	);
 
 	if(options.linters && options.linters.eslint) {
+		if(options.verbose === SUPER_VERBOSE){
+			console.log(chalk.blue('eslint'));
+		}
 		let CLIEngine = require('eslint').CLIEngine;
 		let cli = new CLIEngine({useEslintrc: true});
 		let report = cli.executeOnFiles(['./']);
 		report.results.forEach(function(result){
 			result.messages.forEach(function(message){
-				addResult(result.filePath, message.source, message.line, 'eslint', message.ruleId, message.severity);
+				addResult('eslint', result.filePath, message.source, message.line, 'eslint', message.ruleId, message.severity);
 			});
 		});
+	}
+
+	if(options.linters && options.linters.checkstyle) {
+		const {stdout, stderr} = await exec('java -jar linters/checkstyle-8.8-all.jar ./ -c linters/checkstyle.config.xml -f xml');
+		if(options.verbose === SUPER_VERBOSE){
+			console.log(chalk.blue('checkstyle stdout')+'\n', stdout);
+			console.log(chalk.blue('checkstyle stderr')+'\n', stderr);
+		}
+		parseString(stdout, function (err, result) {
+			lintersLog.checkStyle = {
+				stdout:stdout,
+				stderr:stderr,
+				parsedStdout:result
+			};
+			result.checkstyle.file.forEach(function(file){
+				if(!file.error) {
+					return;
+				}
+				file.error.forEach(function(error) {
+					addResult('checkstyle', file.$.name, '', error.$.line, 'checkstyle', error.$.source.split('.').pop(), SEVERITY_ERROR);
+				});
+			});
+		});
+	}
+
+	if(options.verbose === SUPER_VERBOSE){
+		console.log(chalk.blue('linteverything'));
 	}
 
 	await lintFolder(options);
@@ -158,6 +197,7 @@ async function linteverything (options) {
 
 async function main(options) {
 	let linteverythingrc = {};
+	let return_ = {};
 	try {
 		linteverythingrc = require(process.cwd() + '/.linteverythingrc');
 	} catch (e) {
@@ -165,7 +205,7 @@ async function main(options) {
 			throw e;
 		}
 	}
-	options = Object.assign({}, linteverythingrc, options, require('./default-settings'));
+	options = Object.assign({}, require('./default-settings'), linteverythingrc, options);
 	if(options.verbose) {
 		console.log(`Lint everything with options: ${JSON.stringify(options, null, 2)}`);
 	}
@@ -176,6 +216,14 @@ async function main(options) {
 	let errorCount = results.filter(function(r){
 		return (r.severity === SEVERITY_ERROR);
 	}).length;
+	return_ = {
+		results: results,
+		options: options,
+		linters: lintersLog
+	};
+	if(options.verbose === SUPER_VERBOSE) {
+		console.log(JSON.stringify(return_, null, 2));
+	}
 	if(!errorCount && !warnCount) {
 		console.log(chalk.green('Success'));
 	} else {
@@ -184,13 +232,12 @@ async function main(options) {
 		}
 		if(errorCount) {
 			console.log(chalk.red(`${errorCount} errors`));
-			process.exit(1);
+			if(options.failOnError) {
+				process.exit(1);
+			}
 		}
 	}
-	return {
-		results: results,
-		options: options
-	};
+	return return_;
 }
 
 
