@@ -50,6 +50,7 @@ linteverything(options).then(function(result) {
 
 ## Options
 Options are defined as javascript objects.
+
 They can be set in 3 places:
 - in the argument passed to `linteverything(options)` ;
 - in `.linteverythingrc.js` ;
@@ -57,11 +58,14 @@ They can be set in 3 places:
 
 ### failOnError
 Default : `true`.
+
 Boolean controlling how to exit.
+
 If set to `true`, `linteverything` will exit with code `1`.
 
 ### ignore
 Default : `[]`.
+
 An array of files and folders to ignore. They will be ignored by every linters.
 
 ### linters
@@ -73,4 +77,5 @@ The following linters are supported:
 
 ### verbose
 Default : `false`.
+
 Boolean to enable or disable verbose logs.
