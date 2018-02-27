@@ -49,19 +49,28 @@ linteverything(options).then(function(result) {
 ```
 
 ## Options
-Options can be set in 3 places:
-- in [`default-settings.js`](default-settings.js) ;
+Options are defined as javascript objects.
+They can be set in 3 places:
+- in the argument passed to `linteverything(options)` ;
 - in `.linteverythingrc.js` ;
-- in the argument passed to `linteverything(options)`.
+- in [`default-settings.js`](default-settings.js).
 
-Options are defined in javascript objects.
+### failOnError
+Default : `true`.
+Boolean controlling how to exit.
+If set to `true`, `linteverything` will exit with code `1`.
 
 ### ignore
-A list of files and folders to ignore. They will be ignored by every linters.
+Default : `[]`.
+An array of files and folders to ignore. They will be ignored by every linters.
 
 ### linters
+Default : all linters are enabled.
 The following linters are supported:
-- [eslint](https://github.com/eslint/eslint);
+- [checkstyle](https://github.com/checkstyle/checkstyle) ;
+- [eslint](https://github.com/eslint/eslint) ;
 - [htmllint](https://github.com/htmllint/htmllint).
 
-They are enabled by default.
+### verbose
+Default : `false`.
+Boolean to enable or disable verbose logs.
