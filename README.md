@@ -48,13 +48,15 @@ linteverything(options).then(function(result) {
 });
 ```
 
+[Try it on your browser !](https://npm.runkit.com/linteverything)
+
 ## Options
 Options are defined as javascript objects.
 
 They can be set in 3 places:
 - in the argument passed to `linteverything(options)` ;
 - in `.linteverythingrc.js` ;
-- in [`default-settings.js`](default-settings.js).
+- in [`default-settings.js`](default-settings.js?ts=2).
 
 ### failOnError
 Default : `true`.
