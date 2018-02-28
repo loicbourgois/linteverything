@@ -1,5 +1,9 @@
 module.exports = {
 	failOnError: true,
+	ignore: [],
+	ignoreExtensions: [
+		'jar', 'pdf'
+	],
 	linters: {
 		checkstyle: true,
 		eslint: {

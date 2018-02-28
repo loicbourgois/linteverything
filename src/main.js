@@ -44,6 +44,9 @@ const lintFile = async function(options) {
 	if(pathMatchIgnore(options.workingFile, options)){
 		return;
 	}
+	if(pathMatchIgnoreExtension(options.workingFile, options)) {
+		return;
+	}
 	if(options.verbose){
 		console.log(`\t${chalk.cyan('linteverything')} ${options.workingFile}`);
 	}
@@ -127,6 +130,11 @@ const pathMatchIgnore = function(path, options) {
 		}
 	});
 	return b;
+};
+
+
+const pathMatchIgnoreExtension = function(path, options) {
+	return options.ignoreExtensions.includes(path.split('.').pop());
 };
 
 
