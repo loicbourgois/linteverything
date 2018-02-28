@@ -71,10 +71,11 @@ An array of files and folders to ignore. They will be ignored by every linters.
 ### linters
 Default : all linters are enabled.
 
-The following linters are supported:
+Supported linters:
 - [checkstyle](https://github.com/checkstyle/checkstyle) ;
 - [eslint](https://github.com/eslint/eslint) ;
-- [htmllint](https://github.com/htmllint/htmllint).
+- [htmllint](https://github.com/htmllint/htmllint) ;
+- [stylelint](https://github.com/stylelint/stylelint).
 
 ### verbose
 Default : `false`.
