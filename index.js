@@ -7,6 +7,7 @@ const htmllint = require('htmllint');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const parseString = require('xml2js').parseString;
+const stylelint = require('stylelint');
 
 const SEVERITY_NONE = 0;
 const SEVERITY_WARNING = 1;
@@ -198,6 +199,20 @@ async function linteverything (options) {
 				});
 			});
 		});
+	}
+
+	if(options.linters && options.linters.stylelint) {
+		stylelint.lint({
+			config: options.linters.stylelint.settings,
+			files: process.cwd() + '/**/*.css'
+		})
+			.then(function(data) {
+				console.log(data);
+			})
+			.catch(function(err) {
+				// do things with err e.g.
+				console.error(err.stack);
+			});
 	}
 
 	await lintFolder(options);

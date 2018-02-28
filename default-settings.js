@@ -45,6 +45,15 @@ module.exports = {
 			extensions: [
 				'html'
 			]
+		},
+		stylelint: {
+			settings: {
+				'extends': 'stylelint-config-standard',
+				'rules': {
+					'indentation': 'tab',
+					'number-leading-zero': null
+				}
+			}
 		}
 	}
 };
