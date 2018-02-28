@@ -202,9 +202,12 @@ async function linteverything (options) {
 	}
 
 	if(options.linters && options.linters.stylelint) {
+		if(options.verbose){
+			console.log(chalk.blue('stylelint') + ' ' + options.workingFolder);
+		}
 		await stylelint.lint({
 			config: options.linters.stylelint.settings,
-			files: process.cwd() + '/**/*.css'
+			files: options.workingFolder + '/**/*.css'
 		})
 			.then(function(data) {
 				data.results.forEach(function(result) {

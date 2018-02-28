@@ -25,7 +25,8 @@ p {
 	text-align: justify;
 }
 
-p, #content ul {
+p,
+#content ul {
 	margin-left: 1em;
 	margin-right: 1em;
 }
