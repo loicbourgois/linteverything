@@ -1,4 +1,4 @@
 #!/usr/bin/env node
 'use strict';
-const linteverything = require('../index');
+const linteverything = require('../src/main');
 linteverything();
