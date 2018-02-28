@@ -1,5 +1,5 @@
 const assert = require('assert');
-const linteverything = require('../index');
+const linteverything = require('../src/main');
 describe('Linteverything', function() {
 	describe('normal use', function() {
 		it('should lint everything', async function() {
