@@ -97,7 +97,7 @@ const lintTralingSpaces = function(line, number, options, errorCode, errorString
 
 
 const addResult = function(linter, path, line, lineNumber, errorCode, errorString, severity) {
-	if(!['linteverything', 'eslint', 'checkstyle', 'htmllint'].includes(linter)) {
+	if(!['linteverything', 'eslint', 'checkstyle', 'htmllint', 'stylelint'].includes(linter)) {
 		throw new Error(`${linter} is not a valid linter`);
 	}
 	results.push({
@@ -202,16 +202,29 @@ async function linteverything (options) {
 	}
 
 	if(options.linters && options.linters.stylelint) {
-		stylelint.lint({
+		await stylelint.lint({
 			config: options.linters.stylelint.settings,
 			files: process.cwd() + '/**/*.css'
 		})
 			.then(function(data) {
-				console.log(data);
+				data.results.forEach(function(result) {
+					if(result.warnings) {
+						result.warnings.forEach(function(warning) {
+							addResult(
+								'stylelint',
+								result.source,
+								'',
+								warning.line,
+								'stylelint-' + warning.rule,
+								warning.rule/*warning.text*/,
+								SEVERITY_ERROR
+							);
+						});
+					}
+				});
 			})
 			.catch(function(err) {
-				// do things with err e.g.
-				console.error(err.stack);
+				throw err;
 			});
 	}
 

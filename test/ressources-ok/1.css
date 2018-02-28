@@ -4,7 +4,7 @@
 	padding: 0;
 }
 
-ul{
+ul {
 	padding: 0 1.3em;
 }
 
@@ -25,8 +25,7 @@ p {
 	text-align: justify;
 }
 
-p,
-#content ul {
+p, #content ul {
 	margin-left: 1em;
 	margin-right: 1em;
 }
@@ -84,7 +83,7 @@ body {
 	margin: auto;
 }
 
-@media (min-width : 800px) {
+@media (min-width: 800px) {
 	#index {
 		display: initial;
 	}
