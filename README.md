@@ -70,6 +70,11 @@ Default : `[]`.
 
 An array of files and folders to ignore. They will be ignored by every linters.
 
+### ignoreExtensions
+Default : `['jar', 'pdf']`.
+
+An array of extensions to ignore. They will be ignored by every linters.
+
 ### linters
 Default : all linters are enabled.
 
