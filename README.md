@@ -32,7 +32,7 @@ script:
   - node ./node_modules/linteverything/bin/linteverything.js
 ```
 
-### In your code
+### In Node.js
 First install the package with :
 ```bash
 $ npm install linteverything --save-dev
