@@ -1,6 +1,6 @@
 {
 	"name": "linteverything",
-	"version": "0.9.1",
+	"version": "0.9.2",
 	"description": "lint everything",
 	"main": "index.js",
 	"scripts": {
