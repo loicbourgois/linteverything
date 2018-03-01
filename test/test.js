@@ -7,7 +7,7 @@ describe('Linteverything', function() {
 				failOnError: false,
 				verbose: true
 			}).then(data => {
-				assert.deepEqual(data.results, []);
+				assert.deepEqual(data.results.length, 28);
 			});
 		});
 	});
