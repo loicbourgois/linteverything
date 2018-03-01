@@ -4,6 +4,7 @@ module.exports = {
 	ignoreExtensions: [
 		'jar', 'pdf'
 	],
+	logLevel: 'error',
 	linters: {
 		checkstyle: true,
 		eslint: {
