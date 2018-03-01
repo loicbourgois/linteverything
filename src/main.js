@@ -67,7 +67,7 @@ const lintFile = async function(options) {
 		}
 		await htmllint(fileContent, options.linters.htmllint.settings).then(function(out) {
 			out.forEach(function(e){
-				addResult(options.workingFile, lines[e.line-1], e.line, `htmllint-${e.code}`, e.rule, SEVERITY_ERROR);
+				addResult(options, options.workingFile, lines[e.line-1], e.line, `htmllint-${e.code}`, e.rule, SEVERITY_ERROR);
 			});
 		});
 	}
@@ -85,7 +85,7 @@ const lintIndetation = function(line, number, options, errorCode, errorString) {
 	let regex = /^([\t]*)([ ]+)/g;
 	let r = regex.exec(line);
 	if(r) {
-		addResult('linteverything', options.workingFile, line, number, errorCode, errorString, SEVERITY_WARNING);
+		addResult(options, 'linteverything', options.workingFile, line, number, errorCode, errorString, SEVERITY_WARNING);
 	}
 };
 
@@ -94,12 +94,12 @@ const lintTralingSpaces = function(line, number, options, errorCode, errorString
 	let regex = /([ \t]+)$/g;
 	let r = regex.exec(line);
 	if(r) {
-		addResult('linteverything', options.workingFile, line, number, errorCode, errorString, SEVERITY_ERROR);
+		addResult(options, 'linteverything', options.workingFile, line, number, errorCode, errorString, SEVERITY_ERROR);
 	}
 };
 
 
-const addResult = function(linter, path, line, lineNumber, errorCode, errorString, severity) {
+const addResult = function(options, linter, path, line, lineNumber, errorCode, errorString, severity) {
 	if(!['linteverything', 'eslint', 'checkstyle', 'htmllint', 'stylelint'].includes(linter)) {
 		throw new Error(`${linter} is not a valid linter`);
 	}
@@ -112,12 +112,21 @@ const addResult = function(linter, path, line, lineNumber, errorCode, errorStrin
 		errorString: errorString,
 		severity: severity
 	});
-	if(severity === SEVERITY_NONE) {
+	if(
+		severity === SEVERITY_NONE
+		&& options.logLevel === 'all'
+	) {
 		console.log(`${path}\n  l.${lineNumber}\t${(linter + ' log')}\t${errorString}`);
-	} if(severity === SEVERITY_ERROR) {
-		console.log(`${path}\n  l.${lineNumber}\t${chalk.red(linter + ' error')}\t${errorString}`);
-	} else if(severity === SEVERITY_WARNING) {
+	} else if(
+		severity === SEVERITY_WARNING
+		&& (
+			options.logLevel === 'all'
+			|| options.logLevel === 'warning'
+		)
+	) {
 		console.log(`${path}\n  l.${lineNumber}\t${chalk.yellow(linter + ' warning')}\t${errorString}`);
+	} else if(severity === SEVERITY_ERROR) {
+		console.log(`${path}\n  l.${lineNumber}\t${chalk.red(linter + ' error')}\t${errorString}`);
 	}
 };
 
@@ -176,7 +185,7 @@ async function linteverything (options) {
 		let report = cli.executeOnFiles(['./']);
 		report.results.forEach(function(result){
 			result.messages.forEach(function(message){
-				addResult('eslint', result.filePath, message.source, message.line, 'eslint', message.ruleId, message.severity);
+				addResult(options, 'eslint', result.filePath, message.source, message.line, 'eslint', message.ruleId, message.severity);
 			});
 		});
 	}
@@ -203,7 +212,7 @@ async function linteverything (options) {
 					return;
 				}
 				file.error.forEach(function(error) {
-					addResult('checkstyle', file.$.name, '', error.$.line, 'checkstyle', error.$.source.split('.').pop(), SEVERITY_ERROR);
+					addResult(options, 'checkstyle', file.$.name, '', error.$.line, 'checkstyle', error.$.source.split('.').pop(), SEVERITY_ERROR);
 				});
 			});
 		});
@@ -222,6 +231,7 @@ async function linteverything (options) {
 					if(result.warnings) {
 						result.warnings.forEach(function(warning) {
 							addResult(
+								options,
 								'stylelint',
 								result.source,
 								'',

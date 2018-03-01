@@ -75,6 +75,14 @@ Default : `['jar', 'pdf']`.
 
 An array of extensions to ignore. They will be ignored by every linters.
 
+### logLevel
+Default : `'error'`.
+
+Values :
+- `'all'` : report everything ;
+- `'error'` : report errors only ;
+- `'warning'` : report errors and warnings.
+
 ### linters
 Default : all linters are enabled.
 
